@@ -32,7 +32,7 @@ def load_number(filename):
     try:
         infile = open(filename, "r")
         number = int(infile.read())
-    except ValueError:
+    except ValueError as error:
         print(f"Invalid contents in file '{filename}'.")
         number = 6
     except FileNotFoundError:
