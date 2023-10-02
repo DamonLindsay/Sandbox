@@ -14,9 +14,15 @@ def main():
     that have > LONG_WORD_MINIMUM characters."""
 
     text = "This is a sentence"
-    long_words = [word for word in text.split() if len(word) > MINIMUM_WORD_LENGTH]
-
+    long_words = find_long_words(text)
     print(long_words)
+
+
+def find_long_words(text):
+    """Find and return a list of words from the given text that has more than {MINIMUM_WORD_LENGTH} characters."""
+    words = text.split()
+    long_words = [word for word in words if len(word) > MINIMUM_WORD_LENGTH]
+    return long_words
 
 
 main()
