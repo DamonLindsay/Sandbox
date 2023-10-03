@@ -20,13 +20,15 @@ def get_name_by_number(sequence):
     while not is_valid_input:
         try:
             number = int(input(f"Enter number, up to {len(sequence)}: "))
-            if number <= 0:
+            if number <= 0 or number > len(sequence):
                 print("Invalid number.  Number must be greater than 0.")
             else:
                 is_valid_input = True
                 return sequence[number - 1]
         except IndexError:
             print("IndexError. List index out of range.")
+        except ValueError:
+            print("ValueError.  Please input a valid integer.")
 
 
 main()
