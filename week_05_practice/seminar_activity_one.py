@@ -8,7 +8,7 @@ people have the same oldest age, return the first name.
 
 
 def main():
-    """This program will """
+    """This program will return the oldest person in a list of names."""
     names = ["Bill", "Jane", "Sven"]
     ages = [21, 34, 56]
     print(find_oldest(names, ages))
