@@ -24,13 +24,14 @@ class Product:
         self.is_on_sale = True
 
 
-p = Product("Phone", 340, False)
-print(p.name, "...")
-print(p)
-p.put_on_sale(0.1)
-print(p)
+if __name__ == '__main__':
+    p = Product("Phone", 340, False)
+    print(p.name, "...")
+    print(p)
+    p.put_on_sale(0.1)
+    print(p)
 
-products = [Product("Phone", 340, False), Product("PC", 1420.95, True),
-            Product("Plant", 24.5, True)]
+    products = [Product("Phone", 340, False), Product("PC", 1420.95, True),
+                Product("Plant", 24.5, True)]
 
-on_sale_products = [product for product in products if product.is_on_sale]
+    on_sale_products = [product for product in products if product.is_on_sale]
