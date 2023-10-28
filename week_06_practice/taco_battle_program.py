@@ -47,3 +47,24 @@ if __name__ == '__main__':
     user1 = User("Ben")
     user2 = User("Alice")
     user3 = User("Charlie")
+
+    # Creating a team.
+    team = Team()
+
+    # Adding users to the team.
+    team.add(user1)
+    team.add(user2)
+    team.add(user3)
+
+    # Getting the team leader.
+    leader = team.get_leader()
+    if leader:
+        print(f"Team Leader: {leader.name}")
+
+    # Getting total tacos to give.
+    total_tacos = team.get_total_tacos_to_give()
+    print(f"Total tacos available in the team: {total_tacos}")
+
+    # Getting total score of the team.
+    total_score = team.get_total_score()
+    print(f"Total score of the team: {total_score}")
