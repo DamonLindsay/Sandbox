@@ -7,8 +7,8 @@ class Plant:
         self.height = height
         self.growth_rate = growth_rate
 
-    # def __str__(self):
-    #     return f"{self.name} {self.height} {self.growth_rate}"
+    def __str__(self):
+        return f"{self.name} {self.height} {self.growth_rate}"
 
     def feed(self, amount_of_water):
         self.height += amount_of_water * self.growth_rate
