@@ -13,3 +13,6 @@ class City:
     def __str__(self):
         """Return string representation of data in a City."""
         return f"{self.name}, {self.population:,}, {self.percent}%"
+
+    def __repr__(self):
+        return str(self)
