@@ -2,12 +2,15 @@
 
 
 class User:
+    """A class representing a user in a Taco Reward Program."""
     def __init__(self, name, tacos=5, score=0):
+        """Initialize a User object."""
         self.name = name
         self.tacos = tacos
         self.score = score
 
     def give_tacos(self, other_user, number_of_tacos):
+        """Give a certain number of tacos to another user."""
         if self.tacos >= number_of_tacos:
             other_user.receive_tacos(number_of_tacos)
             self.tacos -= number_of_tacos
@@ -17,9 +20,11 @@ class User:
             print(f"Sorry, {self.name} doesn't have enough tacos to give.")
 
     def receive_tacos(self, number_of_tacos):
+        """ Receive a certain number of tacos."""
         self.tacos += number_of_tacos
 
     def __str__(self):
+        """Return a string representation of the User object."""
         return f"{self.name}, {self.score} points, {self.tacos} tacos left."
 
 
