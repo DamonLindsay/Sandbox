@@ -19,7 +19,8 @@ class Person:
 
     def __eq__(self, other):
         """Return True if the name and age of the comparison are the same."""
-        return self.name == other.name and self.age == other.age
+        # return self.name == other.name and self.age == other.age
+        return self.name, self.age == other.name, other.age
 
 
 p1 = Person("Jane", 19)
