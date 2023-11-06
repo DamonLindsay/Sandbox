@@ -27,10 +27,10 @@ class GuitarsApp(App):
         """Construct main Kivy app."""
         super().__init__(**kwargs)
         # Basic data example - list of Guitar objects - could be loaded from a file or something
-        self.guitars = [Guitar("Gibson L-5 CES", 1922, 16035.40),
-                        Guitar("Line 6 JTV-59", 2010, 1512.9),
-                        Guitar("Ukulele", 2017, 99.95)]
-        # self.guitars = load_guitars("guitars.json")
+        # self.guitars = [Guitar("Gibson L-5 CES", 1922, 16035.40),
+        #                 Guitar("Line 6 JTV-59", 2010, 1512.9),
+        #                 Guitar("Ukulele", 2017, 99.95)]
+        self.guitars = load_guitars("guitars.json")
 
     def build(self):
         """Build the Kivy GUI."""
