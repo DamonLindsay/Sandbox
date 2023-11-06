@@ -1,0 +1,12 @@
+BoxLayout:
+    Button:
+        text: "Press me"
+        on_press: app.handle_button_press(self)
+        on_release: app.handle_release(self)
+    Button:
+        text: "Don't press me"
+        on_press: app.handle_button_press(self)
+        on_release: app.handle_release_dont()
+    Label:
+        text: "Hello world"
+        on_touch_down: app.handle_button_press(self)
