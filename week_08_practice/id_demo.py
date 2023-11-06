@@ -12,8 +12,10 @@ class IDDemo(App):
     def handle_pressed(self):
         if random.randint(1, 10) <= 5:
             self.root.ids.my_label.text = "ouch!!"
+            self.root.ids.another_button.text = "Button 1 Pressed"
         else:
             self.root.ids.my_label.text = "stop that!!"
+            self.root.ids.another_button.text = "Button 2 Pressed"
 
 
 # Create and start the App running
