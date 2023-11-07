@@ -10,10 +10,10 @@ from product import ProductCollection
 
 
 class ShoppingApp(App):
-    """"""
+    """Main Shopping App class"""
 
     def __init__(self, **kwargs):
-        """"""
+        """Initialize the Shopping App object."""
         super(ShoppingApp, self).__init__(**kwargs)
 
         self.title = "Shopping App"
@@ -25,7 +25,7 @@ class ShoppingApp(App):
         self.total_label = Label(text="Total: $0")
 
     def build(self):
-        """"""
+        """Build the Kivy app layout."""
         layout = BoxLayout(orientation="vertical")
 
         for product in self.product_collection.get_products():
@@ -46,12 +46,12 @@ class ShoppingApp(App):
         return layout
 
     def add_to_total(self, price):
-        """Add the price to the total price."""
+        """Add the price of the selected product to the total price."""
         self.total_price += price
         self.total_label.text = f"Total: ${self.total_price:.2f}"
 
     def clear_total(self, instance):
-        """Clear the current total and reset to 0"""
+        """Clear the current total and reset to $0."""
         self.total_price = 0
         self.total_label.text = "Total: $0.00"
 
