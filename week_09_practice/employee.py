@@ -6,7 +6,7 @@ from person import Person
 
 
 class Employee(Person):
-    def __init__(self, salary: int, **kwargs):
+    def __init__(self, salary: float, **kwargs):
         super().__init__(**kwargs)
         self.salary = salary
 
