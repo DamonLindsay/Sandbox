@@ -18,10 +18,3 @@ class Person:
 
     def age(self):
         return int((datetime.now() - self.date_of_birth).days / 365.2425)
-
-
-if __name__ == '__main__':
-    p1 = Person("Jane", datetime(1999, 2, 14))
-    print(p1)
-    print(p1.name)
-    print(p1.age())
