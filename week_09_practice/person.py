@@ -12,9 +12,12 @@ class Person:
         self.name = name
         self.date_of_birth = date_of_birth
 
-    def __repr__(self):
+    def __str__(self):
         date_string = datetime.strftime(self.date_of_birth, "%d/%m/%Y")
         return f"{self.name} ({date_string})"
+
+    def __repr__(self):
+        return str(vars(self))
 
     def age(self):
         return int((datetime.now() - self.date_of_birth).days / 365.2425)
