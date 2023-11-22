@@ -5,15 +5,21 @@
 
     Label:
         text: "Champion Information App"
-        font_size: 20
+        font_size: 24
+        size_hint_y: None
+        height: self.texture_size[1] + 20
 
-    Label:
-        text: "Enter Champion Name:"
+    BoxLayout:
+        orientation: "horizontal"
+        spacing: 10
 
-    TextInput:
-        id: champion_input
-        multiline: False
-        font_size: 16
+        Label:
+            text: "Enter Champion Name:"
+
+        TextInput:
+            id: champion_input
+            multiline: False
+            font_size: 16
 
     ScrollView:
         size_hint_y: None
