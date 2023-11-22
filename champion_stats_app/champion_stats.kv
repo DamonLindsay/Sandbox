@@ -1,0 +1,47 @@
+# championstats.kv
+
+<ChampionStatsApp>:
+    orientation: 'vertical'
+    padding: 10
+
+    Label:
+        id: level_label
+        text: 'Level: 1'
+
+    Label:
+        id: health_label
+        text: 'Health: 500'
+
+    Label:
+        id: attack_damage_label
+        text: 'Attack Damage: 60'
+
+    Label:
+        id: attack_speed_label
+        text: 'Attack Speed: 0.625'
+
+    Label:
+        id: armor_label
+        text: 'Armor: 22'
+
+    Label:
+        id: magic_resist_label
+        text: 'Magic Resist: 30'
+
+    Slider:
+        id: level_slider
+        min: 1
+        max: 18
+        value: 1
+        on_value: app.on_level_change(*args)
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Button:
+            text: 'Ezreal'
+            on_press: app.on_champion_button_press(self)
+
+        Button:
+            text: 'ChampionTemplate'
+            on_press: app.on_champion_button_press(self)

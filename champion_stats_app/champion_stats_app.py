@@ -10,8 +10,10 @@ from kivy.uix.button import Button
 
 
 class ChampionStatsApp(App):
-    def build(self):
-        """Build the main layout of the application."""
+    def __init__(self):
+        super().__init__()
+        self.level_label = ""
+        self.selected_champion = "Ezreal"
         self.champions = {
             "Ezreal": {
                 "Health": {"base": 500, "growth": 80},
@@ -28,6 +30,10 @@ class ChampionStatsApp(App):
                 "Magic Resist": {"base": 35, "growth": 1.0},
             }
         }
+
+    def build(self):
+        """Build the main layout of the application."""
+        self.selected_champion = "Ezreal"  # Initialize selected_champion
 
         layout = BoxLayout(orientation="vertical", padding=10)
 
@@ -59,13 +65,18 @@ class ChampionStatsApp(App):
     def on_champion_button_press(self, instance):
         """Handle the press of a champion selection button."""
         self.selected_champion = instance.text
-        self.update_stats(self.selected_champion, int(self.root.ids.level_slider.value))
+
+        # Check if the widget exists before accessing it
+        if "level_slider" in self.root.ids:
+            self.update_stats(self.selected_champion, int(self.root.ids.level_slider.value))
+        else:
+            print("Error: level_slider not found.")
 
     def update_stats(self, champion, level):
         """Update the displayed stats based on the selected champion and level."""
         for stat, values in self.champions[champion].items():
             base_stat = values["base"] + values["growth"] * (level - 1)
-            self.root.ids[stat.lower() + "label"].text = f"{stat}: {base_stat}"
+            self.root.ids[stat.lower() + "_label"].text = f"{stat}: {base_stat}"
 
 
 if __name__ == '__main__':
