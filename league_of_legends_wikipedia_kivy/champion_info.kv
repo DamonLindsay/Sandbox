@@ -15,12 +15,24 @@
         multiline: False
         font_size: 16
 
-    Label:
-        id: info_label
-        text: ""
-        font_size: 16
+    ScrollView:
+        size_hint_y: None
+        height: 200
+        Label:
+            id: info_label
+            text: ""
+            font_size: 16
+            size_hint_y: None
+            height: self.texture_size[1]
 
-    Button:
-        text: "Search"
-        font_size: 18
-        on_release: app.search_champion()
+    BoxLayout:
+        spacing: 10
+        Button:
+            text: "Search"
+            font_size: 18
+            on_release: app.search_champion()
+
+        Button:
+            text: "Clear"
+            font_size: 18
+            on_release: app.clear_info()
