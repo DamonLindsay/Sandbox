@@ -2,6 +2,7 @@
 Champion Info App Class
 """
 
+from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
@@ -13,16 +14,12 @@ from kivy.app import App
 import wikipedia
 
 
-class ChampionInfoLayout(BoxLayout):
-    """Custom layout for the Champion Information App."""
-
-
 class ChampionInfoApp(App):
     """Main Application class for the Champion Information App."""
 
     def build(self):
         """Build and return the root widget."""
-        return ChampionInfoLayout()
+        return Builder.load_file("champion_info.kv")
 
     def search_champion(self):
         """Search for champion information and update the UI."""
