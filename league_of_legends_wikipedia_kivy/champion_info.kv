@@ -1,0 +1,26 @@
+<ChampionInfoLayout>:
+    orientation: 'vertical'
+    spacing: 10
+    padding: 10
+
+    Label:
+        text: "Champion Information App"
+        font_size: 20
+
+    Label:
+        text: "Enter Champion Name:"
+
+    TextInput:
+        id: champion_input
+        multiline: False
+        font_size: 16
+
+    Label:
+        id: info_label
+        text: ""
+        font_size: 16
+
+    Button:
+        text: "Search"
+        font_size: 18
+        on_release: app.search_champion()
