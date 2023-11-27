@@ -26,16 +26,16 @@ class InputScreen(Screen):
 
         # Add widgets for data input
         label = Label(text="Enter Match Information:")
-        survivor_input = TextInput(hint_text="Survivor Names (comma-separated)")
-        killer_input = TextInput(hint_text="Killer Name")
-        result_input = TextInput(hint_text="Survivor Win / Killer Win")
+        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)")
+        self.killer_input = TextInput(hint_text="Killer Name")
+        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win")
         save_button = Button(text="Save", on_press=self.save_data)
 
         # Add widgets to the layout
         layout.add_widget(label)
-        layout.add_widget(survivor_input)
-        layout.add_widget(killer_input)
-        layout.add_widget(result_input)
+        layout.add_widget(self.survivor_input)
+        layout.add_widget(self.killer_input)
+        layout.add_widget(self.match_result_input)
         layout.add_widget(save_button)
 
         # Set the layout as the screen's root widget
@@ -44,9 +44,9 @@ class InputScreen(Screen):
     def save_data(self, instance):
         """Save Dead by Daylight match data to storage when the Save button is pressed."""
         # Get input data
-        survivors = self.ids.survivor_input.text.split(",")
-        killer = self.ids.killer_input.text
-        match_result = self.ids.result_input.text
+        survivors = self.survivor_input.text.split(",")
+        killer = self.killer_input.text
+        match_result = self.match_result_input.text
 
         # Validate input data (add more validation as needed)
 
@@ -61,9 +61,9 @@ class InputScreen(Screen):
         self.data_manager.save_data(match_data)
 
         # Clear the input fields after saving
-        self.ids.survivor_input.text = ""
-        self.ids.killer_input.text = ""
-        self.ids.match_result.text = ""
+        self.survivor_input.text = ""
+        self.killer_input.text = ""
+        self.match_result_input.text = ""
 
 
 class FilterScreen(Screen):
