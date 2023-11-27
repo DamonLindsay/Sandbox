@@ -69,9 +69,39 @@ class InputScreen(Screen):
 class FilterScreen(Screen):
     """Screen for filtering and analyzing stored data."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, data_manager, **kwargs):
         """Initialize the FilterScreen object."""
         super().__init__(**kwargs)
+        self.data_manager = data_manager
+        self.setup_ui()
+
+    def setup_ui(self):
+        """Set up the user interface for data filtering and display."""
+        layout = BoxLayout(orientation="vertical")
+
+        # Add widgets for filtering
+        label = Label(text="Filter and View Data:")
+        filter_button = Button(text="Filter", on_press=self.filter_data)
+        data_label = Label(text="Filtered Data Will Appear Here")
+
+        # Add widgets to the layout
+        layout.add_widget(label)
+        layout.add_widget(filter_button)
+        layout.add_widget(data_label)
+
+        # Set te layout as the screen's root widget
+        self.add_widget(layout)
+
+    def filter_data(self, instance):
+        """Filter Dead by Daylight match data and display the results."""
+        # Placeholder for filtering logic
+        filtered_data = self.data_manager.filter_data({})
+
+        # Display filtered data (placeholder)
+        data_label = self.ids.data_label
+        data_label.text = "Filtered Data:\n"
+        for data in filtered_data:
+            data_label.text += f"{data}\n"
 
 
 class DataManager:
@@ -90,8 +120,8 @@ class DataManager:
 
     def filter_data(self, filters):
         """Filter stored data based on specific filters."""
-        # Implement data filtering logic
-        pass
+        # Placeholder for filtering logic
+        return self.data  # For now, return all data
 
 
 class DbdApp(App):
@@ -103,7 +133,7 @@ class DbdApp(App):
 
         # Create screens with the DataManager instance
         input_screen = InputScreen(data_manager=data_manager, name="input")
-        filter_screen = FilterScreen(name="filter")  # Placeholder for future filter screen
+        filter_screen = FilterScreen(data_manager=data_manager, name="filter")  # Placeholder for future filter screen
 
         # Create screen manager
         screen_manager = ScreenManager()
