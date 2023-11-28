@@ -1,0 +1,1 @@
+[{"survivors": ["Ada Wong"], "killer": "The Trapper", "match result": "Killer Win"}, {"survivors": ["David King", " Steve Harrington"], "killer": "The Oni", "match result": "Survivor Win"}]

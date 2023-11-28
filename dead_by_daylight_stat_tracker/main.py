@@ -8,6 +8,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
+import json
 
 
 class InputScreen(Screen):
@@ -17,6 +18,9 @@ class InputScreen(Screen):
         """Initialize the InputScreen."""
         super().__init__(**kwargs)
         # Add widgets for data input here
+        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win")
+        self.killer_input = TextInput(hint_text="Killer Name")
+        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)")
         self.data_manager = data_manager
         self.setup_ui()
 
@@ -26,9 +30,6 @@ class InputScreen(Screen):
 
         # Add widgets for data input
         label = Label(text="Enter Match Information:")
-        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)")
-        self.killer_input = TextInput(hint_text="Killer Name")
-        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win")
         save_button = Button(text="Save", on_press=self.save_data)
 
         # Add widgets to the layout
@@ -107,16 +108,32 @@ class FilterScreen(Screen):
 class DataManager:
     """Class responsible for managing data storage and retrieval."""
 
-    def __init__(self):
+    def __init__(self, filename="dbd_data.txt"):
         """Initialize data storage."""
         # Initialize data storage here.
+        self.filename = filename
         self.data = []
+        self.load_data()
 
     def save_data(self, data):
         """Save game data to storage."""
         # Implement data saving logic
         self.data.append(data)
-        print(f"Data saved: {data}")
+        self.save_to_file()
+
+    def load_data(self):
+        """Load data from file."""
+        try:
+            with open(self.filename, "r") as output_file:
+                self.data = json.load(output_file)
+        except FileNotFoundError:
+            print("No previous data found.  Starting with an empty dataset.")
+
+    def save_to_file(self):
+        """Save data to file."""
+        with open(self.filename, "w") as input_file:
+            json.dump(self.data, input_file)
+            print("Data saved to file.")
 
     def filter_data(self, filters):
         """Filter stored data based on specific filters."""
@@ -129,7 +146,7 @@ class DbdApp(App):
 
     def build(self):
         """Build the app and set up screens."""
-        data_manager = DataManager()
+        data_manager = DataManager(filename="dbd_data.txt")
 
         # Create screens with the DataManager instance
         input_screen = InputScreen(data_manager=data_manager, name="input")
