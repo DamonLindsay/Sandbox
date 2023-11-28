@@ -87,6 +87,7 @@ class InputScreen(Screen):
 
         save_button = Button(text="Save", on_press=self.save_data)
         clear_button = Button(text="Clear", on_press=self.clear_fields)
+        back_button = Button(text="Back to Home", on_press=self.go_to_home_screen)
 
         # Bind the tab key to the on_tab method for each input field
         self.survivor_input.bind(on_key_down=self.on_tab)
@@ -102,6 +103,7 @@ class InputScreen(Screen):
         # Add the Save and Clear buttons to the horizontal layout
         buttons_layout.add_widget(save_button)
         buttons_layout.add_widget(clear_button)
+        buttons_layout.add_widget(back_button)
 
         # Add the horizontal layout with buttons to the main layout
         layout.add_widget(buttons_layout)
@@ -119,6 +121,10 @@ class InputScreen(Screen):
             if focused_widget:
                 focused_widget.focus = True
             return True  # Consume the Tab key event
+
+    def go_to_home_screen(self, instance):
+        """Switch to the home screen."""
+        self.manager.current = "home"
 
     def save_data(self, instance):
         """Save Dead by Daylight match data to storage when the Save button is pressed."""
