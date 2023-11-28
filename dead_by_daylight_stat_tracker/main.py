@@ -3,12 +3,16 @@ League of Legends Statistics Tracker
 """
 
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 import json
+
+
+class HomeScreen(Screen):
+    """Home screen with buttons for displaying, adding, and exporting data"""
 
 
 class InputScreen(Screen):
@@ -18,9 +22,9 @@ class InputScreen(Screen):
         """Initialize the InputScreen."""
         super().__init__(**kwargs)
         # Add widgets for data input here
-        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win")
-        self.killer_input = TextInput(hint_text="Killer Name")
-        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)")
+        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win", multiline=False)
+        self.killer_input = TextInput(hint_text="Killer Name", multiline=False)
+        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)", multiline=False)
         self.data_manager = data_manager
         self.setup_ui()
 
@@ -30,17 +34,44 @@ class InputScreen(Screen):
 
         # Add widgets for data input
         label = Label(text="Enter Match Information:")
+
+        # Create a horizontal box layout for buttons
+        buttons_layout = BoxLayout(orientation="horizontal")
+
         save_button = Button(text="Save", on_press=self.save_data)
+        clear_button = Button(text="Clear", on_press=self.clear_fields)
+
+        # Bind the tab key to the on_tab method for each input field
+        self.survivor_input.bind(on_key_down=self.on_tab)
+        self.killer_input.bind(on_key_down=self.on_tab)
+        self.match_result_input.bind(on_key_down=self.on_tab)
 
         # Add widgets to the layout
         layout.add_widget(label)
         layout.add_widget(self.survivor_input)
         layout.add_widget(self.killer_input)
         layout.add_widget(self.match_result_input)
-        layout.add_widget(save_button)
+
+        # Add the Save and Clear buttons to the horizontal layout
+        buttons_layout.add_widget(save_button)
+        buttons_layout.add_widget(clear_button)
+
+        # Add the horizontal layout with buttons to the main layout
+        layout.add_widget(buttons_layout)
 
         # Set the layout as the screen's root widget
         self.add_widget(layout)
+
+    def on_tab(self, instance, key, *args):
+        """Handle the Tab key to move focus to the next input field."""
+        if key == 9:  # ASCII code for the Tab Key
+            # Get the currently focused widget
+            focused_widget = self.get_focus_next()
+
+            # If there's a focused widget, move focus to it
+            if focused_widget:
+                focused_widget.focus = True
+            return True  # Consume the Tab key event
 
     def save_data(self, instance):
         """Save Dead by Daylight match data to storage when the Save button is pressed."""
@@ -62,6 +93,10 @@ class InputScreen(Screen):
         self.data_manager.save_data(match_data)
 
         # Clear the input fields after saving
+        self.clear_fields()
+
+    def clear_fields(self, *args):
+        """Clear the input fields."""
         self.survivor_input.text = ""
         self.killer_input.text = ""
         self.match_result_input.text = ""
