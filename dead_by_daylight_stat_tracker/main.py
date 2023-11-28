@@ -14,6 +14,49 @@ import json
 class HomeScreen(Screen):
     """Home screen with buttons for displaying, adding, and exporting data"""
 
+    def __init__(self, data_manager, **kwargs):
+        """Initialize the HomeScreen."""
+        super().__init__(**kwargs)
+        self.data_manager = data_manager
+        self.setup_ui()
+
+    def setup_ui(self):
+        """Set up the user interface for the home screen."""
+        layout = BoxLayout(orientation="vertical")
+
+        # Add widgets for home screen
+        label = Label(text="Dead by Daylight Statistics Tracker")
+
+        # Create buttons for actions
+        display_button = Button(text="Display Data", on_press=self.display_data)
+        add_button = Button(text="Add Data", on_press=self.go_to_input_screen)
+        export_button = Button(text="Export Data", on_press=self.export_data)
+
+        # Add widgets to the layout
+        layout.add_widget(label)
+        layout.add_widget(display_button)
+        layout.add_widget(add_button)
+        layout.add_widget(export_button)
+
+        # Set the layout as the screen's root widget
+        self.add_widget(layout)
+
+    def display_data(self, instance):
+        """Display the current data."""
+        # Placeholdr for displaying data
+        data_label = Label(text=str(self.data_manager.data))
+        self.add_widget(data_label)
+
+    def go_to_input_screen(self, instance):
+        """Switch to the input screen for adding data."""
+        self.manager.current = "input"
+
+    def export_data(self, instance):
+        """Export the current data to a .txt file."""
+        # Placeholder for the export logic
+        self.data_manager.export_data_to_txt()
+        print("Data exported to .txt file.")
+
 
 class InputScreen(Screen):
     """Screen for collecting Dead by Daylight statistics."""
@@ -184,11 +227,13 @@ class DbdApp(App):
         data_manager = DataManager(filename="dbd_data.txt")
 
         # Create screens with the DataManager instance
+        home_screen = HomeScreen(data_manager=data_manager, name="home")
         input_screen = InputScreen(data_manager=data_manager, name="input")
         filter_screen = FilterScreen(data_manager=data_manager, name="filter")  # Placeholder for future filter screen
 
         # Create screen manager
         screen_manager = ScreenManager()
+        screen_manager.add_widget(home_screen)
         screen_manager.add_widget(input_screen)
         screen_manager.add_widget(filter_screen)
 
