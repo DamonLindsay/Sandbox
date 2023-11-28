@@ -3,10 +3,12 @@ League of Legends Statistics Tracker
 """
 
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 import json
 
@@ -68,9 +70,7 @@ class InputScreen(Screen):
         """Initialize the InputScreen."""
         super().__init__(**kwargs)
         # Add widgets for data input here
-        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win")
-        self.killer_input = TextInput(hint_text="Killer Name")
-        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)")
+        self.match_data = {}
         self.data_manager = data_manager
         self.home_screen = home_screen
         self.setup_ui()
@@ -82,45 +82,88 @@ class InputScreen(Screen):
         # Add widgets for data input
         label = Label(text="Enter Match Information:")
 
-        # Create a horizontal box layout for buttons
-        buttons_layout = BoxLayout(orientation="horizontal")
+        # Create a ScrollView to allow scrolling if the content is too long
+        scroll_view = ScrollView()
 
+        # Create a Grid Layout to arrange the input fields in a grid
+        grid_layout = GridLayout(cols=2, spacing=10, size_hint_y=None, row_default_height=40)
+        grid_layout.bind(minimum_height=grid_layout.setter("height"))
+
+        layout.add_widget(label)
+
+        # Add input fields for Survivor Information
+        self.add_survivor_input_fields(grid_layout)
+
+        # Add input fields for Killer Information
+        self.add_killer_input_fields(grid_layout)
+
+        # Add input fields for Map Information
+        self.add_map_input_field(grid_layout)
+
+        # Create a horizontal BoxLayout for buttons
+        buttons_layout = BoxLayout(orientation="horizontal", spacing=10, size_hint_y=None, height=40)
+
+        # Create buttons for actions
         save_button = Button(text="Save", on_press=self.save_data)
         clear_button = Button(text="Clear", on_press=self.clear_fields)
         back_button = Button(text="Back to Home", on_press=self.go_to_home_screen)
 
-        # Bind the tab key to the on_tab method for each input field
-        self.survivor_input.bind(on_key_down=self.on_tab)
-        self.killer_input.bind(on_key_down=self.on_tab)
-        self.match_result_input.bind(on_key_down=self.on_tab)
-
-        # Add widgets to the layout
-        layout.add_widget(label)
-        layout.add_widget(self.survivor_input)
-        layout.add_widget(self.killer_input)
-        layout.add_widget(self.match_result_input)
-
-        # Add the Save and Clear buttons to the horizontal layout
+        # Add the Save, Clear and Back buttons to the horizontal layout
         buttons_layout.add_widget(save_button)
         buttons_layout.add_widget(clear_button)
         buttons_layout.add_widget(back_button)
 
-        # Add the horizontal layout with buttons to the main layout
+        # Add the ScrollView with the GridLayout to the layout
+        scroll_view.add_widget(grid_layout)
+        layout.add_widget(scroll_view)
+
+        # Add widgets to the layout
         layout.add_widget(buttons_layout)
 
         # Set the layout as the screen's root widget
         self.add_widget(layout)
 
-    def on_tab(self, instance, key, *args):
-        """Handle the Tab key to move focus to the next input field."""
-        if key == 9:  # ASCII code for the Tab Key
-            # Get the currently focused widget
-            focused_widget = self.get_focus_next()
+    def add_survivor_input_fields(self, grid_layout):
+        """Add input fields for Survivor Information."""
+        survivor_label = Label(text="Survivor Information:")
+        grid_layout.add_widget(survivor_label)
 
-            # If there's a focused widget, move focus to it
-            if focused_widget:
-                focused_widget.focus = True
-            return True  # Consume the Tab key event
+        # Add input fields for each survivor
+        for i in range(1, 5):
+            survivor_name_input = TextInput(hint_text=f"Survivor {i} Name")
+            survivor_perk_input = TextInput(hint_text="Perks (comma-separated)")
+            item_input = TextInput(hint_text="Item name")
+            survivor_addons_input = TextInput(hint_text="Item Addon Names (comma-separated)")
+            survivor_outcome_input = TextInput(hint_text="Killed or Survived")
+            survivor_offering_input = TextInput(hint_text="Offering Name")
+
+            grid_layout.add_widget(survivor_name_input)
+            grid_layout.add_widget(survivor_perk_input)
+            grid_layout.add_widget(item_input)
+            grid_layout.add_widget(survivor_addons_input)
+            grid_layout.add_widget(survivor_outcome_input)
+            grid_layout.add_widget(survivor_offering_input)
+
+    def add_killer_input_fields(self, grid_layout):
+        """Add input fields for Killer Information."""
+        killer_label = Label(text="Killer Information")
+        grid_layout.add_widget(killer_label)
+
+        # Add input fields for the killer
+        killer_name_input = TextInput(hint_text="Killer Name")
+        killer_addons_input = TextInput(hint_text="Addons Used (comma-separated)")
+        killer_offering_input = TextInput(hint_text="Offering Name")
+
+        grid_layout.add_widget(killer_name_input)
+        grid_layout.add_widget(killer_addons_input)
+        grid_layout.add_widget(killer_offering_input)
+
+    def add_map_input_field(self, grid_layout):
+        """Add input field for Map Information."""
+        map_label = Label(text="Map Information")
+        map_input = TextInput(hint_text="Map Name")
+        grid_layout.add_widget(map_label)
+        grid_layout.add_widget(map_input)
 
     def go_to_home_screen(self, instance):
         """Switch to the home screen."""
@@ -128,31 +171,35 @@ class InputScreen(Screen):
 
     def save_data(self, instance):
         """Save Dead by Daylight match data to storage when the Save button is pressed."""
-        # Get input data
-        survivors = self.survivor_input.text.split(",")
-        killer = self.killer_input.text
-        match_result = self.match_result_input.text
-
-        # Validate input data (add more validation as needed)
-
-        # Create a data dictionary
-        match_data = {
-            "survivors": survivors,
-            "killer": killer,
-            "match result": match_result
+        self.match_data = {
+            "survivor_information": {"name": self.survivor_name_input.text,
+                                     "perks": self.survivor_perk_input.text,
+                                     "item": self.item_input.text,
+                                     "item addons": self.survivor_addons_input.text,
+                                     "outcome": self.survivor_outcome_input.text,
+                                     "offering": self.survivor_offering_input.text},
+            "killer_information": {"name": self.killer_name_input.text,
+                                   "addons": self.killer_addons_input.text,
+                                   "offering": self.killer_offering_input.text},
+            "map_information": {"name": self.map_input.text}
         }
 
         # Save the data using the DataManager
-        self.data_manager.save_data(match_data)
+        self.data_manager.save_data(self.match_data)
 
         # Clear the input fields after saving
         self.clear_fields()
 
     def clear_fields(self, *args):
         """Clear the input fields."""
-        self.survivor_input.text = ""
-        self.killer_input.text = ""
-        self.match_result_input.text = ""
+        input_fields = [self.survivor_name_input, self.survivor_perk_input,
+                        self.item_input, self.survivor_addons_input,
+                        self.survivor_outcome_input, self.survivor_offering_input,
+                        self.killer_name_input, self.killer_addons_input,
+                        self.killer_offering_input, self.map_input]
+
+        for field in input_fields:
+            field.text = ""
 
 
 class FilterScreen(Screen):
