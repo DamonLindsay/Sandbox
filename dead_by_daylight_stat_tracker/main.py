@@ -20,6 +20,10 @@ class HomeScreen(Screen):
         self.data_manager = data_manager
         self.setup_ui()
 
+        # Create a label for displaying data
+        self.data_label = Label(text="")
+        self.add_widget(self.data_label)
+
     def setup_ui(self):
         """Set up the user interface for the home screen."""
         layout = BoxLayout(orientation="vertical")
@@ -43,9 +47,8 @@ class HomeScreen(Screen):
 
     def display_data(self, instance):
         """Display the current data."""
-        # Placeholdr for displaying data
-        data_label = Label(text=str(self.data_manager.data))
-        self.add_widget(data_label)
+        # Update the text of the existing label
+        self.data_label.text = str(self.data_manager.data)
 
     def go_to_input_screen(self, instance):
         """Switch to the input screen for adding data."""
@@ -61,14 +64,15 @@ class HomeScreen(Screen):
 class InputScreen(Screen):
     """Screen for collecting Dead by Daylight statistics."""
 
-    def __init__(self, data_manager, **kwargs):
+    def __init__(self, data_manager, home_screen, **kwargs):
         """Initialize the InputScreen."""
         super().__init__(**kwargs)
         # Add widgets for data input here
-        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win", multiline=False)
-        self.killer_input = TextInput(hint_text="Killer Name", multiline=False)
-        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)", multiline=False)
+        self.match_result_input = TextInput(hint_text="Survivor Win / Killer Win")
+        self.killer_input = TextInput(hint_text="Killer Name")
+        self.survivor_input = TextInput(hint_text="Survivor Names (comma-separated)")
         self.data_manager = data_manager
+        self.home_screen = home_screen
         self.setup_ui()
 
     def setup_ui(self):
@@ -148,8 +152,9 @@ class InputScreen(Screen):
 class FilterScreen(Screen):
     """Screen for filtering and analyzing stored data."""
 
-    def __init__(self, data_manager, **kwargs):
+    def __init__(self, data_manager, home_screen, **kwargs):
         """Initialize the FilterScreen object."""
+        self.home_screen = home_screen  # Store home screen as an instance variable
         super().__init__(**kwargs)
         self.data_manager = data_manager
         self.setup_ui()
@@ -213,6 +218,16 @@ class DataManager:
             json.dump(self.data, input_file)
             print("Data saved to file.")
 
+    def export_data_to_txt(self, file_path="exported_data.txt"):
+        """Export data to a .txt file."""
+        try:
+            with open(file_path, "w") as txt_file:
+                for entry in self.data:
+                    txt_file.write(str(entry) + "\n")
+                print(f"Data exported to {file_path}.")
+        except Exception as e:
+            print(f"Error exporting data: {e}")
+
     def filter_data(self, filters):
         """Filter stored data based on specific filters."""
         # Placeholder for filtering logic
@@ -228,8 +243,9 @@ class DbdApp(App):
 
         # Create screens with the DataManager instance
         home_screen = HomeScreen(data_manager=data_manager, name="home")
-        input_screen = InputScreen(data_manager=data_manager, name="input")
-        filter_screen = FilterScreen(data_manager=data_manager, name="filter")  # Placeholder for future filter screen
+        input_screen = InputScreen(data_manager=data_manager, home_screen=home_screen, name="input")
+        filter_screen = FilterScreen(data_manager=data_manager, home_screen=home_screen,
+                                     name="filter")  # Placeholder for future filter screen
 
         # Create screen manager
         screen_manager = ScreenManager()
