@@ -59,6 +59,10 @@ class Manager(Employee):
         """Calculates the pay of the manager."""
         return self.salary + self.bonus
 
+    def __str__(self):
+        """Returns a string representation of the Manager object."""
+        return f"Manager {self.name}, Employee ID: {self.id}, Salary: {self.salary}, Bonus: {self.bonus}"
+
 
 class Executive(Employee):
     """Class representing an executive."""
