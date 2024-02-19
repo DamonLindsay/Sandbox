@@ -9,7 +9,7 @@ class Manager(Employee):
     """Class representing a manager."""
 
     def __init__(self, name, employee_id, salary, bonus):
-        """Initalizes a Manager object."""
+        """Initializes a Manager object."""
         super().__init__(name, employee_id)
         self.salary = salary
         self.bonus = bonus
