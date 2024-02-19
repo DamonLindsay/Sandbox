@@ -1,7 +1,7 @@
 """
 Student class module
 """
-from week_09_practice.person import Person
+from jcu_practicals.week_09_practice.person import Person
 
 
 class Student(Person):

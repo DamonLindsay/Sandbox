@@ -1,5 +1,5 @@
 """Activity Two"""
-from week_06_practice.product import Product
+from jcu_practicals.week_06_practice.product import Product
 
 products = [Product("Phone", 340, False), Product("PC", 1420.95, True), Product("Plant", 24.5, True)]
 

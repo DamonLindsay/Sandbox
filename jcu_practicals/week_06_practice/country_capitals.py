@@ -1,7 +1,7 @@
 """Demo - country: capital city loaded from CSV."""
 
 import csv
-from week_06_practice.city import City
+from jcu_practicals.week_06_practice.city import City
 
 FILENAME = "../week_05_practice/countries.csv"
 
