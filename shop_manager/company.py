@@ -1,6 +1,7 @@
 """
 Company Class File
 """
+from employee import HourlyEmployee, SalariedEmployee, Manager, Executive
 
 
 class Company:
@@ -20,16 +21,13 @@ class Company:
 
     def raise_employee(self, employee, raise_amount):
         """Gives a raise to an employee."""
-        if employee in self.employees:
-            if isinstance(employee, HourlyEmployee):
-                employee.hourly_rate += raise_amount
-            elif isinstance(employee, SalariedEmployee):
-                employee.salary += raise_amount
-            elif isinstance(employee, Manager):
-                employee.bonus += raise_amount
-            elif isinstance(employee, Executive):
-                employee.stock_options += raise_amount
-            else:
-                raise ValueError("Invalid employee type.")
+        if isinstance(employee, HourlyEmployee):
+            employee.hourly_rate += raise_amount
+        elif isinstance(employee, SalariedEmployee):
+            employee.salary += raise_amount
+        elif isinstance(employee, Manager):
+            employee.bonus += raise_amount
+        elif isinstance(employee, Executive):
+            employee.stock_options += raise_amount
         else:
-            raise ValueError("Employee not found in company.")
+            raise ValueError("Invalid employee type.")
