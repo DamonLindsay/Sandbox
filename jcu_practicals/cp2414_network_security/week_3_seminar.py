@@ -36,12 +36,6 @@ class User:
         self.password = password
 
 
-def _hash_password(password):
-    """Hashes a password using SHA-256 with a random salt."""
-    salt = "".join(random.choices(string.ascii_letters + string.digits, k=8))
-    return hashlib.sha256((password + salt).encode()).hexdigest() + ":" + salt
-
-
 def generate_random_password():
     """Generates a random password with 12 characters."""
     characters = string.ascii_letters + string.digits + string.punctuation
@@ -63,6 +57,20 @@ def check_password_strength(password):
     return True
 
 
+def _encrypt_password(password):
+    """Encrypts a password using Caesar cipher."""
+    shift = random.randint(1, 25)  # Random shift between 1 and 25
+    encrypted_password = ""
+    for char in password:
+        if char.isalpha():
+            shifted_char = chr((ord(char) + shift - 97) % 26 + 97) if char.islower() else chr(
+                (ord(char) + shift - 65) % 26 + 65)
+            encrypted_password += shifted_char
+        else:
+            encrypted_password += char
+            return encrypted_password
+
+
 class AuthenticationSystem:
     """Handles user registration, password management, and authentication."""
 
@@ -76,8 +84,8 @@ class AuthenticationSystem:
         if username in self.users:
             print("Username already exists.  Please choose another one.")
             return
-        hashed_password = _hash_password(password)
-        self.users[username] = User(username, email, hashed_password)
+        encrypted_password = _encrypt_password(password)
+        self.users[username] = User(username, email, encrypted_password)
         self._save_passwords()
 
     def _save_passwords(self):
@@ -92,9 +100,8 @@ class AuthenticationSystem:
             print("User does not exist.")
             return False
         stored_password = self.users[username].password
-        hashed_input_password, salt = stored_password.split(":")
-        input_hashed_password = hashlib.sha256((password + salt).encode()).hexdigest()
-        if input_hashed_password == hashed_input_password:
+        input_hashed_password = _encrypt_password(password)
+        if input_hashed_password == stored_password:
             print("Login successful!")
             return True
         else:
