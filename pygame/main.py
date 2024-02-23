@@ -14,7 +14,7 @@ class Game:
         self.character_spritesheet = Spritesheet("img/character.png")
         self.terrain_spritesheet = Spritesheet("img/terrain.png")
 
-    def createTilemap(self):
+    def create_tilemap(self):
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
                 Ground(self, j, i)
@@ -32,7 +32,7 @@ class Game:
         self.enemies = pygame.sprite.LayeredUpdates()
         self.attacks = pygame.sprite.LayeredUpdates()
 
-        self.createTilemap()
+        self.create_tilemap()
 
     def events(self):
         """Game loop events."""
