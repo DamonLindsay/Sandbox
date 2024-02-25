@@ -6,9 +6,11 @@ import random
 
 class Spritesheet:
     def __init__(self, file):
+        """Loads a spritesheet from a given file."""
         self.sheet = pygame.image.load(file).convert()
 
     def get_sprite(self, x, y, width, height):
+        """Extracts a single sprite from the spritesheet."""
         sprite = pygame.Surface([width, height])
         sprite.blit(self.sheet, (0, 0), (x, y, width, height))
         sprite.set_colorkey(BLACK)
@@ -17,6 +19,7 @@ class Spritesheet:
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
+        """Represents the player character."""
         self.game = game
         self._layer = PLAYER_LAYER
         self.groups = self.game.all_sprites
@@ -56,6 +59,7 @@ class Player(pygame.sprite.Sprite):
                                  self.game.character_spritesheet.get_sprite(68, 66, self.width, self.height)]
 
     def update(self):
+        """Updates the player's position, animation, and collision detection."""
         self.movement()
         self.animate()
         self.collide_enemy()
@@ -69,6 +73,7 @@ class Player(pygame.sprite.Sprite):
         self.y_change = 0
 
     def movement(self):
+        """Handles player movement based on keyboard input."""
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             for sprite in self.game.all_sprites:
@@ -92,12 +97,14 @@ class Player(pygame.sprite.Sprite):
             self.facing = "down"
 
     def collide_enemy(self):
+        """Checks for collisions between the player and enemies."""
         hits = pygame.sprite.spritecollide(self, self.game.enemies, False)
         if hits:
             self.kill()
             self.game.playing = False
 
     def collide_blocks(self, direction):
+        """Checks for collisions between the player and blocks."""
         if direction == "x":
             hits = pygame.sprite.spritecollide(self, self.game.blocks, False)
             if hits:
@@ -123,6 +130,7 @@ class Player(pygame.sprite.Sprite):
                         sprite.rect.y -= PLAYER_SPEED
 
     def animate(self):
+        """Handles animation of the player character."""
         if self.facing == "down":
             if self.y_change == 0:
                 self.image = self.game.character_spritesheet.get_sprite(3, 2, self.width, self.height)
@@ -162,6 +170,7 @@ class Player(pygame.sprite.Sprite):
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
+        """Represents an enemy."""
         self.game = game
         self._layer = ENEMY_LAYER
         self.groups = self.game.all_sprites, self.game.enemies
@@ -204,6 +213,7 @@ class Enemy(pygame.sprite.Sprite):
                                  self.game.enemy_spritesheet.get_sprite(68, 66, self.width, self.height)]
 
     def update(self):
+        """Updates the enemy's position, animation, and behaviour."""
         self.movement()
         self.animate()
 
@@ -214,6 +224,7 @@ class Enemy(pygame.sprite.Sprite):
         self.y_change = 0
 
     def movement(self):
+        """Handles enemy movement."""
         if self.facing == "left":
             self.x_change -= ENEMY_SPEED
             self.movement_loop -= 1
@@ -227,6 +238,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.facing = "left"
 
     def animate(self):
+        """Handles animation of the enemy."""
         if self.facing == "down":
             if self.y_change == 0:
                 self.image = self.game.enemy_spritesheet.get_sprite(3, 2, self.width, self.height)
@@ -266,6 +278,7 @@ class Enemy(pygame.sprite.Sprite):
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
+        """Represents a block in the game."""
         self.game = game
         self._layer = BLOCK_LAYER
         self.groups = self.game.all_sprites, self.game.blocks
@@ -285,6 +298,7 @@ class Block(pygame.sprite.Sprite):
 
 class Ground(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
+        """Represents the ground in the game."""
         self.game = game
         self._layer = GROUND_LAYER
         self.groups = self.game.all_sprites
@@ -304,6 +318,7 @@ class Ground(pygame.sprite.Sprite):
 
 class Button:
     def __init__(self, x, y, width, height, fg, bg, content, fontsize):
+        """Represents a clickable button."""
         self.font = pygame.font.Font("arial.ttf", fontsize)
         self.content = content
 
@@ -326,6 +341,7 @@ class Button:
         self.image.blit(self.text, self.text_rect)
 
     def is_pressed(self, pos, pressed):
+        """Checks if the button is pressed."""
         if self.rect.collidepoint(pos):
             if pressed[0]:
                 return True
@@ -335,6 +351,7 @@ class Button:
 
 class Attack(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
+        """Represents an attack action."""
         self.game = game
         self._layer = PLAYER_LAYER
         self.groups = self.game.all_sprites, self.game.attacks
@@ -378,13 +395,16 @@ class Attack(pygame.sprite.Sprite):
                               self.game.attack_spritesheet.get_sprite(128, 0, self.width, self.height)]
 
     def update(self):
+        """Updates the attack's position and behaviour."""
         self.animate()
         self.collide()
 
     def collide(self):
+        """Checks for collisions between the attack and enemies."""
         hits = pygame.sprite.spritecollide(self, self.game.enemies, True)
 
     def animate(self):
+        """Handles animation of the attack."""
         direction = self.game.player.facing
 
         if direction == "up":
