@@ -187,7 +187,11 @@ class Enemy(pygame.sprite.Sprite):
         self.facing = random.choice(["left", "right"])
         self.animation_loop = 1
         self.movement_loop = 0
-        self.max_travel = random.randint(7, 30)
+        self.max_travel = random.randint(29, 30)
+
+        self.pause_duration = random.randint(60, 180)  # Randomize pause time between 1 and 3 seconds
+        self.pause_counter = 0
+        self.movement_counter = 0
 
         self.image = self.game.enemy_spritesheet.get_sprite(3, 2, self.width, self.height)
         self.image.set_colorkey(BLACK)
@@ -217,25 +221,74 @@ class Enemy(pygame.sprite.Sprite):
         self.movement()
         self.animate()
 
+        # Check if the enemy is currently paused
+        if self.pause_counter > 0:
+            # Decrement pause counter
+            self.pause_counter -= 1
+        else:
+            # If not paused, proceed with movement logic
+            self.movement_counter += 1
+
+            if self.movement_counter >= self.max_travel:
+                # Change direction after reaching maximum travel distance
+                self.facing = random.choice(["left", "right", "up", "down"])
+                self.movement_counter = 0
+                self.pause_counter = self.pause_duration  # Start the pause timer
+
+        # Move the enemy
         self.rect.x += self.x_change
         self.rect.y += self.y_change
 
+        # Check for collisions with blocks
+        self.collide_blocks()
+
         self.x_change = 0
         self.y_change = 0
+
+    def collide_blocks(self):
+        """Handles collision between the enemy and blocks."""
+        hits = pygame.sprite.spritecollide(self, self.game.blocks, False)
+        for block in hits:
+            if self.x_change > 0:
+                self.rect.right = block.rect.left
+            elif self.x_change < 0:
+                self.rect.left = block.rect.right
+            if self.y_change > 0:
+                self.rect.bottom = block.rect.top
+            elif self.y_change < 0:
+                self.rect.top = block.rect.bottom
+            return True
+        return False
 
     def movement(self):
         """Handles enemy movement."""
         if self.facing == "left":
             self.x_change -= ENEMY_SPEED
             self.movement_loop -= 1
-            if self.movement_loop <= -self.max_travel:
+            if self.movement_loop <= -self.max_travel or self.collide_blocks():
                 self.facing = "right"
+                self.movement_loop = 0
 
         if self.facing == "right":
             self.x_change += ENEMY_SPEED
             self.movement_loop += 1
-            if self.movement_loop >= self.max_travel:
+            if self.movement_loop >= self.max_travel or self.collide_blocks():
                 self.facing = "left"
+                self.movement_loop = 0
+
+        if self.facing == "down":
+            self.y_change += ENEMY_SPEED
+            self.movement_loop += 1
+            if self.movement_loop >= self.max_travel or self.collide_blocks():
+                self.facing = "up"
+                self.movement_loop = 0
+
+        if self.facing == "up":
+            self.y_change -= ENEMY_SPEED
+            self.movement_loop += 1
+            if self.movement_loop >= self.max_travel or self.collide_blocks():
+                self.facing = "down"
+                self.movement_loop = 0
 
     def animate(self):
         """Handles animation of the enemy."""
