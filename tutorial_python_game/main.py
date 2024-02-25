@@ -5,7 +5,24 @@ import sys
 
 
 class Game:
+    """Class representing the game.
+
+    Attributes:
+        screen(pygame.Surface): The game screen.
+        clock(pygame.time.Clock): The game clock.
+        running (bool): Flag indicating if the game is running.
+        font (pygame.font.Font): The font used for text rendering.
+        character_spritesheet (Spritesheet): Spritesheet for character sprites.
+        terrain_spritesheet (Spritesheet): Spritesheet for terrain sprites.
+        enemy_spritesheet (Spritesheet): Spritesheet for enemy sprites.
+        attack_spritesheet (Spritesheet): Spritesheet for attack sprites.
+        intro_background (pygame.Surface): Intro screen background image.
+        go_background (pygame.Surface): Game over screen background image.
+        player (Player): The player object.
+        """
+
     def __init__(self):
+        """Initializes the Game object."""
         pygame.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
@@ -20,6 +37,7 @@ class Game:
         self.go_background = pygame.image.load("./img/gameover.png")
 
     def create_tilemap(self):
+        """Creates the tilemap for the game."""
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
                 Ground(self, j, i)
@@ -31,7 +49,7 @@ class Game:
                     self.player = Player(self, j, i)
 
     def new(self):
-        """A new game starts."""
+        """Starts a new game."""
         self.playing = True
 
         self.all_sprites = pygame.sprite.LayeredUpdates()
@@ -42,7 +60,7 @@ class Game:
         self.create_tilemap()
 
     def events(self):
-        """Game loop events."""
+        """Handles game loop events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
@@ -60,24 +78,25 @@ class Game:
                         Attack(self, self.player.rect.x + TILESIZE, self.player.rect.y)
 
     def update(self):
-        """Game loop updates"""
+        """Updates the game state."""
         self.all_sprites.update()
 
     def draw(self):
-        """Game loop draw."""
+        """Draws the game objects on the screen."""
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
         pygame.display.update()
 
     def main(self):
-        """Game loop."""
+        """Main game loop."""
         while self.playing:
             self.events()
             self.update()
             self.draw()
 
     def game_over(self):
+        """Displays the game over screen."""
         text = self.font.render("Game Over", True, WHITE)
         text_rect = text.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
 
@@ -105,6 +124,7 @@ class Game:
             pygame.display.update()
 
     def intro_screen(self):
+        """Displays the intro screen."""
         intro = True
 
         title = self.font.render("Awesome Game", True, BLACK)
