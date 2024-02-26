@@ -19,7 +19,7 @@ class HealthBar:
                      "default": "\033[0m"
                      }
 
-    def __init__(self, entity, length: int, is_coloured: bool = True, colour: str = "") -> None:
+    def __init__(self, entity, length: int = 20, is_coloured: bool = True, colour: str = "") -> None:
         self.entity = entity
         self.length = length
         self.current_value = entity.health

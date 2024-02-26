@@ -3,9 +3,8 @@ import os
 from character import Hero, Enemy
 from weapon import *
 
-hero = Hero(name="Hero", health=100)
-hero.equip(iron_sword)
-enemy = Enemy(name="Enemy", health=100, weapon=short_bow)
+hero = Hero(name="Hero", health=100, weapon=big_iron_fishing_pole)
+enemy = Enemy(name="Enemy", health=100, weapon=fists)
 
 while True:
     os.system("cls")
