@@ -27,14 +27,14 @@ class Game:
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
-        self.font = pygame.font.Font("Arial.ttf", 32)
+        self.font = pygame.font.Font("arial.ttf", 32)
 
         self.character_spritesheet = Spritesheet("img/character.png")
         self.terrain_spritesheet = Spritesheet("img/terrain.png")
         self.enemy_spritesheet = Spritesheet("img/enemy.png")
         self.attack_spritesheet = Spritesheet("img/attack.png")
-        self.intro_background = pygame.image.load("./img/introbackground.png")
-        self.go_background = pygame.image.load("./img/gameover.png")
+        self.intro_background = pygame.image.load("img/introbackground.png")
+        self.go_background = pygame.image.load("img/gameover.png")
 
     def create_tilemap(self):
         """Creates the tilemap for the game."""
