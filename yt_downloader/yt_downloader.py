@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
 from pytube import YouTube
+from PIL import Image, ImageTk
+import requests
+from io import BytesIO
 
 
 def download_video():
@@ -17,6 +20,16 @@ def download_video():
             download_label.config(text="Download completed!")
         else:
             messagebox.showerror("Error", "No streams found for this video.")
+
+        # Display thumbnail
+        thumbnail_url = yt.thumbnail_url
+        response = requests.get(thumbnail_url)
+        thumbnail_data = response.content
+        image = Image.open(BytesIO(thumbnail_data))
+        image.thumbnail((200, 200))  # Resize thumbnail
+        thumbnail = ImageTk.PhotoImage(image)
+        thumbnail_label.config(image=thumbnail)
+        thumbnail_label.image = thumbnail  # Keep reference to the image to avoid garbage collection
     except Exception as e:
         messagebox.showerror("Error", "An error occurred: " + str(e))
 
@@ -28,7 +41,7 @@ root.title("Youtube Downloader")
 # Create and place widgets
 link_label = tk.Label(root, text="Enter YouTube link:")
 link_label.pack()
-link_entry = tk.Entry(root, width=100)
+link_entry = tk.Entry(root, width=75)
 link_entry.pack()
 
 download_button = tk.Button(root, text="Download", command=download_video)
@@ -42,6 +55,10 @@ views_label.pack()
 
 download_label = tk.Label(root, text="")
 download_label.pack()
+
+# Thumbnail label
+thumbnail_label = tk.Label(root)
+thumbnail_label.pack()
 
 # Run the GUI event loop
 root.mainloop()
