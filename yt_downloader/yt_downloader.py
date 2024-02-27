@@ -1,29 +1,47 @@
-import sys
-
+import tkinter as tk
+from tkinter import messagebox
 from pytube import YouTube
-from sys import argv
 
 
-def download_video(link):
+def download_video():
     try:
+        link = link_entry.get()
         yt = YouTube(link)
-        print("Title: ", yt.title)
-        print("Views: ", yt.views)
+        title_label.config(text="Title: " + yt.title)
+        views_label.config(text="Views: " + str(yt.views))
 
         yd = yt.streams.get_highest_resolution()
         if yd:
-            print("Downloading...")
+            download_label.config(text="Downloading...")
             yd.download("C:\\Users\\User\\Downloads")
-            print("Download completed!")
+            download_label.config(text="Download completed!")
         else:
-            print("No streams found for this video.")
+            messagebox.showerror("Error", "No streams found for this video.")
     except Exception as e:
-        print("An error occurred: ", e)
+        messagebox.showerror("Error", "An error occurred: " + str(e))
 
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <youtube_link>")
-    else:
-        link = sys.argv[1]
-        download_video(link)
+# Create GUI window
+root = tk.Tk()
+root.title("Youtube Downloader")
+
+# Create and place widgets
+link_label = tk.Label(root, text="Enter YouTube link:")
+link_label.pack()
+link_entry = tk.Entry(root, width=100)
+link_entry.pack()
+
+download_button = tk.Button(root, text="Download", command=download_video)
+download_button.pack()
+
+title_label = tk.Label(root, text="")
+title_label.pack()
+
+views_label = tk.Label(root, text="")
+views_label.pack()
+
+download_label = tk.Label(root, text="")
+download_label.pack()
+
+# Run the GUI event loop
+root.mainloop()
