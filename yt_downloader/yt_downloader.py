@@ -1,5 +1,3 @@
-import os.path
-import time
 import tkinter as tk
 from tkinter import messagebox
 from pytube import YouTube
@@ -33,8 +31,6 @@ def search_video():
 
 
 def download_video():
-    global download_finished
-
     def download():
         try:
             link = link_entry.get()
@@ -53,30 +49,6 @@ def download_video():
     # Start a new thread to perform the download operation
     threading.Thread(target=download).start()
 
-    # Update the download progress and speed
-    update_download_status()
-
-
-def update_download_status():
-    try:
-        link = link_entry.get()
-        yt = YouTube(link)
-        yd = yt.streams.get_highest_resolution()
-        if yd:
-            while not download_finished:
-                total_size = yd.filesize
-                filesize_downloaded = os.path.getsize(f"C:\\Users\\User\\Downloads\\{yt.title}")
-                progress = (filesize_downloaded / total_size) * 100 if total_size else 0
-                download_label.config(
-                    text=f"Downloading... {progress:.2f}% - {filesize_downloaded} / {total_size} bytes - ")
-                root.update_idletasks()  # Update the GUI
-                time.sleep(1)  # Update every second
-    except Exception as e:
-        download_label.config(text="Error: " + str(e))
-
-
-# Initialize global variables
-download_finished = False
 
 # Create GUI window
 root = tk.Tk()
